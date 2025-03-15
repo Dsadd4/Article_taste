@@ -47,8 +47,7 @@ python current_app.py
 
 ---
 
-## 🤖 **Developers**  
-- **Yifan Li**  
+##  **Collaborate Developers**  
 - **ChatGPT** (Collaborative Development Assistant)  
 
 ---
