@@ -42,6 +42,10 @@ python current_app.py
 
 ---
 
+## 🥰 setup
+In config.json set the key word you interested in
+
+
 ## 🎯 **Interface Overview**  
 > The retrieved article list will automatically highlight relevant articles based on the specified keywords. Clicking the title will directly open the article.  
 
