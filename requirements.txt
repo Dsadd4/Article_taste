@@ -1,0 +1,7 @@
+requests==2.31.0
+beautifulsoup4==4.12.2
+pyqt5==5.15.10
+pystray==0.19.5
+pillow==10.2.0
+schedule==1.2.1
+pywin32==306
