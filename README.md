@@ -7,6 +7,7 @@
 ## 🌟 **Project Overview**  
 **Article_Taste** is a Python-based tool designed to automatically scrape the latest article titles, links, and abstracts from major journals and display the relevant content in a user-friendly interface with keyword-based highlighting.  
 
+<img src="example.PNG" alt="Example Image" width="600"/>
 ✨ **Key Features:**  
 ✅ Supports ArXiv, Nature Biotechnology, Nature, Nature Methods, Nature Machine Intelligence, BioRxiv, and more 
 ✅ Module design: You can add your favorite journal by setting specific code.
