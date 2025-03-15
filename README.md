@@ -16,6 +16,11 @@
 ---
 
 ## 📥 **Setup Environment**  
+### 0. open your bash###
+```bash  
+git clone https://github.com/Dsadd4/Article_taste
+cd Article_taste
+```  
 ### 1. Create environment  
 ```bash  
 conda create -n Article_taste python==3.11  
