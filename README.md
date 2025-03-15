@@ -1,5 +1,5 @@
 
-# 🧠 **Article_Taste**  
+# 🤩 **Article_Taste**  
 🚀 A tool for tracking and extracting research article updates from multiple journals (including ArXiv, Nature Biotechnology, BioRxiv, etc.).  In WINDOWS system!
 
 ---
