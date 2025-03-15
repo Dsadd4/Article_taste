@@ -16,7 +16,7 @@
 ---
 
 ## 📥 **Setup Environment**  
-### 0. open your bash###
+### Open bash ###
 ```bash  
 git clone https://github.com/Dsadd4/Article_taste
 cd Article_taste
