@@ -1,0 +1,30 @@
+        # 新增的图片显示区域
+        # 使用 QWidget 包裹 pic_area
+        # 设置 pic_area_container 的大小
+        # 将 pic_area_container 添加到主布局
+        self.pic_area = QTextBrowser(self)
+         # 创建QScrollArea
+        self.scroll_area = QScrollArea(self)
+        self.scroll_area.setWidgetResizable(True)  # 使内容自适应大小
+        
+        # 创建一个QWidget作为容器
+        self.pic_area_container = QWidget()
+        
+        self.pic_area_container.setLayout(QVBoxLayout())
+        self.pic_area_container.layout().addWidget(self.pic_area)
+
+
+
+
+def on_wordcloud_finished(self, file_path):
+        if file_path and os.path.exists(file_path):
+            self.pic_area.append("词云生成完成 ✅")  # 显示生成完成信息
+
+            # 设置显示的大小
+            pixmap = QPixmap(file_path)
+            pixmap = pixmap.scaled(1600, 1600, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+            
+            # 插入图片
+            self.pic_area.insertHtml(f'<img src="{file_path}" width="100%" height="auto">')
+
+            self.pic_area.append("Word cloud successfully generated!")  # 显示完成信息
