@@ -9,7 +9,11 @@
 
 Article Taste is a comprehensive desktop application for tracking and managing scientific papers across multiple platforms. Built with PyQt5, this tool helps researchers stay updated with the latest publications from ArXiv, Nature journals, bioRxiv, medRxiv, Science, Cell, and more.
 
-![Application Screenshot](achat.png)
+<img src="achat.png" alt="Application Screenshot" width="200"/>
+
+## Applicaiton window
+
+<img src="./img/window.PNG" alt="Application Screenshot" width="600"/>
 
 ## Features
 
@@ -149,7 +153,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 Article Taste 是一款用于跨平台追踪和管理科学论文的综合桌面应用。基于 PyQt5 构建，帮助科研人员及时获取 ArXiv、Nature 期刊、bioRxiv、medRxiv、Science、Cell 等平台的最新论文。
 
-![应用截图](achat.png)
+<img src="achat.png" alt="Application Screenshot" width="200"/>
+
+## 应用窗口
+
+<img src="./img/window.PNG" alt="Application Screenshot" width="600"/>
 
 ## 功能特色
 
