@@ -1,0 +1,587 @@
+{
+  "nature_machine_intelligence": {
+    "journal_name": "nature_machine_intelligence",
+    "selected_indices": [
+      "A180",
+      "A98",
+      "A179",
+      "A103",
+      "A182"
+    ],
+    "articles": [
+      {
+        "title": "A comprehensive large-scale biomedical knowledge graph for AI-powered data-driven biomedical research",
+        "link": "https://www.nature.com/articles/s42256-025-01014-w",
+        "score": 0.5953779220581055,
+        "index": "A180"
+      },
+      {
+        "title": "Towards agentic science for advancing scientific discovery",
+        "link": "https://www.nature.com/articles/s42256-025-01110-x",
+        "score": 0.590008020401001,
+        "index": "A98"
+      },
+      {
+        "title": "Towards unveiling sensitive and decisive patterns in explainable AI with a case study in geometric deep learning",
+        "link": "https://www.nature.com/articles/s42256-025-00998-9",
+        "score": 0.5649094581604004,
+        "index": "A179"
+      },
+      {
+        "title": "Towards highly sensitive deep learning-based end-to-end database search for tandem mass spectrometry",
+        "link": "https://www.nature.com/articles/s42256-024-00960-1",
+        "score": 0.553166925907135,
+        "index": "A103"
+      },
+      {
+        "title": "Explainable AI reveals Clever Hans effects in unsupervised learning models",
+        "link": "https://www.nature.com/articles/s42256-025-01000-2",
+        "score": 0.5480529069900513,
+        "index": "A182"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "nature": {
+    "journal_name": "nature",
+    "selected_indices": [
+      "A118",
+      "A1772",
+      "A615",
+      "A974",
+      "A474"
+    ],
+    "articles": [
+      {
+        "title": "‘Tiny’ AI model beats massive LLMs at logic test",
+        "link": "https://www.nature.com/articles/d41586-025-03379-9",
+        "score": 0.5700764060020447,
+        "index": "A118"
+      },
+      {
+        "title": "OpenAI’s o3 tops new AI league table for answering scientific questions",
+        "link": "https://www.nature.com/articles/d41586-025-02177-7",
+        "score": 0.561772882938385,
+        "index": "A1772"
+      },
+      {
+        "title": "Will AI ever win its own Nobel? Some predict a prize-worthy science discovery soon",
+        "link": "https://www.nature.com/articles/d41586-025-03223-0",
+        "score": 0.5537481904029846,
+        "index": "A615"
+      },
+      {
+        "title": "AI tool detects LLM-generated text in research papers and peer reviews",
+        "link": "https://www.nature.com/articles/d41586-025-02936-6",
+        "score": 0.5490210652351379,
+        "index": "A974"
+      },
+      {
+        "title": "AI discovers learning algorithm that outperforms those designed by humans",
+        "link": "https://www.nature.com/articles/d41586-025-03398-6",
+        "score": 0.538880467414856,
+        "index": "A474"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "biorxiv": {
+    "journal_name": "biorxiv",
+    "selected_indices": [
+      "A2516",
+      "A2516",
+      "A2516",
+      "A2516",
+      "A2516"
+    ],
+    "articles": [
+      {
+        "title": "Preference-Based Fine-Tuning of Genomic Sequence Models for Personal Expression Prediction with Data Augmentation",
+        "link": "https://www.biorxiv.org/content/10.1101/2025.11.09.687505",
+        "score": 0.5334956049919128,
+        "index": "A2516"
+      },
+      {
+        "title": "Preference-Based Fine-Tuning of Genomic Sequence Models for Personal Expression Prediction with Data Augmentation",
+        "link": "https://www.biorxiv.org/content/10.1101/2025.11.09.687505",
+        "score": 0.5334956049919128,
+        "index": "A2516"
+      },
+      {
+        "title": "Preference-Based Fine-Tuning of Genomic Sequence Models for Personal Expression Prediction with Data Augmentation",
+        "link": "https://www.biorxiv.org/content/10.1101/2025.11.09.687505",
+        "score": 0.5334956049919128,
+        "index": "A2516"
+      },
+      {
+        "title": "Preference-Based Fine-Tuning of Genomic Sequence Models for Personal Expression Prediction with Data Augmentation",
+        "link": "https://www.biorxiv.org/content/10.1101/2025.11.09.687505",
+        "score": 0.5334956049919128,
+        "index": "A2516"
+      },
+      {
+        "title": "Preference-Based Fine-Tuning of Genomic Sequence Models for Personal Expression Prediction with Data Augmentation",
+        "link": "https://www.biorxiv.org/content/10.1101/2025.11.09.687505",
+        "score": 0.5334956049919128,
+        "index": "A2516"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "nature_computer_science": {
+    "journal_name": "nature_computer_science",
+    "selected_indices": [
+      "A35",
+      "A97",
+      "A146",
+      "A129",
+      "A91"
+    ],
+    "articles": [
+      {
+        "title": "Pioneering real-time genomic analysis by in-memory computing",
+        "link": "https://www.nature.com/articles/s43588-025-00883-w",
+        "score": 0.5331109762191772,
+        "index": "A35"
+      },
+      {
+        "title": "Threats to scientific software from over-reliance on AI code assistants",
+        "link": "https://www.nature.com/articles/s43588-025-00845-2",
+        "score": 0.5165176391601562,
+        "index": "A97"
+      },
+      {
+        "title": "Towards transparency and knowledge exchange in AI-assisted data analysis code generation",
+        "link": "https://www.nature.com/articles/s43588-025-00781-1",
+        "score": 0.5145716071128845,
+        "index": "A146"
+      },
+      {
+        "title": "Author Correction: Approaching coupled-cluster accuracy for molecular electronic structures with multi-task learning",
+        "link": "https://www.nature.com/articles/s43588-025-00767-z",
+        "score": 0.5050290822982788,
+        "index": "A129"
+      },
+      {
+        "title": "Arti-‘fickle’ intelligence: using LLMs as a tool for inference in the political and social sciences",
+        "link": "https://www.nature.com/articles/s43588-025-00843-4",
+        "score": 0.5035958886146545,
+        "index": "A91"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "Science": {
+    "journal_name": "Science",
+    "selected_indices": [
+      "A20",
+      "A28",
+      "A94",
+      "A94",
+      "A71"
+    ],
+    "articles": [
+      {
+        "title": "Advancing science- and evidence-based AI policy",
+        "link": "https://www.science.org/doi/10.1126/science.adu8449",
+        "score": 0.5285339951515198,
+        "index": "A20"
+      },
+      {
+        "title": "Deep generative models design mRNA sequences with enhanced translational capacity and stability",
+        "link": "https://www.science.org/doi/10.1126/science.adr8470",
+        "score": 0.44739803671836853,
+        "index": "A28"
+      },
+      {
+        "title": "Genomic architecture of egg mimicry and its consequences for speciation in parasitic cuckoos",
+        "link": "https://www.science.org/doi/10.1126/science.adt9355",
+        "score": 0.3854367434978485,
+        "index": "A94"
+      },
+      {
+        "title": "Genomic architecture of egg mimicry and its consequences for speciation in parasitic cuckoos",
+        "link": "https://www.science.org/doi/10.1126/science.adt9355",
+        "score": 0.3854367434978485,
+        "index": "A94"
+      },
+      {
+        "title": "A legendary request for narwhal DNA",
+        "link": "https://www.science.org/doi/10.1126/science.ady6674",
+        "score": 0.3785693347454071,
+        "index": "A71"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "nature_methods": {
+    "journal_name": "nature_methods",
+    "selected_indices": [
+      "A171",
+      "A68",
+      "A131",
+      "A28",
+      "A229"
+    ],
+    "articles": [
+      {
+        "title": "Author Correction: A universal language for finding mass spectrometry data patterns",
+        "link": "https://www.nature.com/articles/s41592-025-02785-1",
+        "score": 0.5225920677185059,
+        "index": "A171"
+      },
+      {
+        "title": "Machine learning for accelerating discovery from single-molecule data",
+        "link": "https://www.nature.com/articles/s41592-025-02840-x",
+        "score": 0.5223361253738403,
+        "index": "A68"
+      },
+      {
+        "title": "A transformer model for de novo sequencing of data-independent acquisition mass spectrometry data",
+        "link": "https://www.nature.com/articles/s41592-025-02718-y",
+        "score": 0.5086302757263184,
+        "index": "A131"
+      },
+      {
+        "title": "Scaling up sequence searching",
+        "link": "https://www.nature.com/articles/s41592-025-02922-w",
+        "score": 0.49956461787223816,
+        "index": "A28"
+      },
+      {
+        "title": "A universal language for finding mass spectrometry data patterns",
+        "link": "https://www.nature.com/articles/s41592-025-02660-z",
+        "score": 0.48997732996940613,
+        "index": "A229"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "nature_biotechnology": {
+    "journal_name": "nature_biotechnology",
+    "selected_indices": [
+      "A111",
+      "A214",
+      "A215",
+      "A355",
+      "A238"
+    ],
+    "articles": [
+      {
+        "title": "Pythia provides deep learning-driven precision in CRISPR–Cas9 genome engineering",
+        "link": "https://www.nature.com/articles/s41587-025-02818-2",
+        "score": 0.5115662813186646,
+        "index": "A111"
+      },
+      {
+        "title": "Self-supervised learning from small-molecule mass spectrometry data",
+        "link": "https://www.nature.com/articles/s41587-025-02677-x",
+        "score": 0.49246978759765625,
+        "index": "A214"
+      },
+      {
+        "title": "Self-supervised learning of molecular representations from millions of tandem mass spectra using DreaMS",
+        "link": "https://www.nature.com/articles/s41587-025-02663-3",
+        "score": 0.48229148983955383,
+        "index": "A215"
+      },
+      {
+        "title": "A platform for the biomedical application of large language models",
+        "link": "https://www.nature.com/articles/s41587-024-02534-3",
+        "score": 0.4781043529510498,
+        "index": "A355"
+      },
+      {
+        "title": "AI tool adjusts for ancestral bias in genetic data",
+        "link": "https://www.nature.com/articles/s41587-025-02651-7",
+        "score": 0.47712719440460205,
+        "index": "A238"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "nature_communications": {
+    "journal_name": "nature_communications",
+    "selected_indices": [
+      "A354",
+      "A412",
+      "A454",
+      "A329",
+      "A325"
+    ],
+    "articles": [
+      {
+        "title": "Benchmarking informatics workflows for data-independent acquisition single-cell proteomics",
+        "link": "https://www.nature.com/articles/s41467-025-65174-4",
+        "score": 0.4932658076286316,
+        "index": "A354"
+      },
+      {
+        "title": "Photonic edge intelligence chip for multi-modal sensing, inference and learning",
+        "link": "https://www.nature.com/articles/s41467-025-65151-x",
+        "score": 0.43600961565971375,
+        "index": "A412"
+      },
+      {
+        "title": "Cell line-matched reference enables high-precision functional genomics",
+        "link": "https://www.nature.com/articles/s41467-025-66155-3",
+        "score": 0.4299073815345764,
+        "index": "A454"
+      },
+      {
+        "title": "Reconciling time and prediction error theories of associative learning",
+        "link": "https://www.nature.com/articles/s41467-025-65137-9",
+        "score": 0.4281284809112549,
+        "index": "A329"
+      },
+      {
+        "title": "Adaptive stretching of representations across brain regions and deep learning model layers",
+        "link": "https://www.nature.com/articles/s41467-025-65231-y",
+        "score": 0.4213886857032776,
+        "index": "A325"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "arxiv": {
+    "journal_name": "arxiv",
+    "selected_indices": [
+      "A30",
+      "A24",
+      "A31",
+      "A10",
+      "A36"
+    ],
+    "articles": [
+      {
+        "title": "Agentic AI-Empowered Conversational Embodied Intelligence Networks in 6G",
+        "link": "https://arxiv.org/abs/2511.19865",
+        "score": 0.46223074197769165,
+        "index": "A30"
+      },
+      {
+        "title": "Reducing Latency of LLM Search Agent via Speculation-based Algorithm-System Co-Design",
+        "link": "https://arxiv.org/abs/2511.20048",
+        "score": 0.45539772510528564,
+        "index": "A24"
+      },
+      {
+        "title": "MicroSims: A Framework for AI-Generated, Scalable Educational Simulations with Universal Embedding and Adaptive Learning Support",
+        "link": "https://arxiv.org/abs/2511.19864",
+        "score": 0.45446163415908813,
+        "index": "A31"
+      },
+      {
+        "title": "DRAFT-RL: Multi-Agent Chain-of-Draft Reasoning for Reinforcement Learning-Enhanced LLMs",
+        "link": "https://arxiv.org/abs/2511.20468",
+        "score": 0.4529411494731903,
+        "index": "A10"
+      },
+      {
+        "title": "Scaling Agentic Reinforcement Learning for Tool-Integrated Reasoning in VLMs",
+        "link": "https://arxiv.org/abs/2511.19773",
+        "score": 0.4468766748905182,
+        "index": "A36"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "cell": {
+    "journal_name": "cell",
+    "selected_indices": [
+      "A95",
+      "A70",
+      "A107",
+      "A22",
+      "A71"
+    ],
+    "articles": [
+      {
+        "title": "Simplifying protein engineering with deep learning",
+        "link": "https://www.cell.com/cell/abstract/S0092-8674(25)00859-1",
+        "score": 0.4533918499946594,
+        "index": "A95"
+      },
+      {
+        "title": "Modeling the vertebrate regulatory sequence landscape by UUATAC-seq and deep learning",
+        "link": "https://www.cell.com/cell/abstract/S0092-8674(25)00686-5",
+        "score": 0.41750583052635193,
+        "index": "A70"
+      },
+      {
+        "title": "Iterative recombinase technologies for efficient and precise genome engineering across kilobase to megabase scales",
+        "link": "https://www.cell.com/cell/abstract/S0092-8674(25)00800-1",
+        "score": 0.39409664273262024,
+        "index": "A107"
+      },
+      {
+        "title": "AI-generated MLH1 small binder improves prime editing efficiency",
+        "link": "https://www.cell.com/cell/abstract/S0092-8674(25)00799-8",
+        "score": 0.3685227930545807,
+        "index": "A22"
+      },
+      {
+        "title": "Human-specific gene expansions contribute to brain evolution",
+        "link": "https://www.cell.com/cell/abstract/S0092-8674(25)00739-1",
+        "score": 0.35586750507354736,
+        "index": "A71"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "medrxiv": {
+    "journal_name": "medrxiv",
+    "selected_indices": [
+      "A451",
+      "A451",
+      "A343",
+      "A343",
+      "A359"
+    ],
+    "articles": [
+      {
+        "title": "Conversational Artificial Intelligence for Translational Precision Medicine: Integrating Social Determinants of Health, Genomics, and Clinical Data with AI-HOPE-PM",
+        "link": "https://www.medrxiv.org/content/10.1101/2025.03.28.25324864",
+        "score": 0.4479012191295624,
+        "index": "A451"
+      },
+      {
+        "title": "Conversational Artificial Intelligence for Translational Precision Medicine: Integrating Social Determinants of Health, Genomics, and Clinical Data with AI-HOPE-PM",
+        "link": "https://www.medrxiv.org/content/10.1101/2025.03.28.25324864",
+        "score": 0.4479012191295624,
+        "index": "A451"
+      },
+      {
+        "title": "A Pilot Meta-research on Evolving Evidence Behind Genetic Variant (Re)Classification",
+        "link": "https://www.medrxiv.org/content/10.1101/2025.04.07.25325116",
+        "score": 0.43585124611854553,
+        "index": "A343"
+      },
+      {
+        "title": "A Pilot Meta-research on Evolving Evidence Behind Genetic Variant (Re)Classification",
+        "link": "https://www.medrxiv.org/content/10.1101/2025.04.07.25325116",
+        "score": 0.43585124611854553,
+        "index": "A343"
+      },
+      {
+        "title": "Evaluating Large Language Model-Generated Brain MRI Protocols: Performance of GPT4o, o3-mini, DeepSeek-R1 and Qwen2.5-72B",
+        "link": "https://www.medrxiv.org/content/10.1101/2025.04.08.25325433",
+        "score": 0.4224070906639099,
+        "index": "A359"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "scholar": {
+    "journal_name": "scholar",
+    "selected_indices": [
+      "A58",
+      "A11",
+      "A97",
+      "A92",
+      "A98"
+    ],
+    "articles": [
+      {
+        "title": "Mole-bert: Rethinking pre-training graph neural networks for molecules",
+        "link": "https://chemrxiv.org/engage/chemrxiv/article-details/64361823a41dec1a56e75135",
+        "score": 0.44158607721328735,
+        "index": "A58"
+      },
+      {
+        "title": "Unbox the black-box for the medical explainable AI via multi-modal and multi-centre data fusion: A mini-review, two showcases and beyond",
+        "link": "https://www.sciencedirect.com/science/article/pii/S1566253521001597",
+        "score": 0.4065783619880676,
+        "index": "A11"
+      },
+      {
+        "title": "Dink-net: Neural clustering on large graphs",
+        "link": "https://proceedings.mlr.press/v202/liu23v.html",
+        "score": 0.40414556860923767,
+        "index": "A97"
+      },
+      {
+        "title": "A survey of deep graph clustering: Taxonomy, challenge, application, and open resource",
+        "link": "https://arxiv.org/abs/2211.12875",
+        "score": 0.3960886001586914,
+        "index": "A92"
+      },
+      {
+        "title": "Understanding the limitations of deep models for molecular property prediction: Insights and solutions",
+        "link": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/cc83e97320000f4e08cb9e293b12cf7e-Abstract-Conference.html",
+        "score": 0.3866475522518158,
+        "index": "A98"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  },
+  "huggingface": {
+    "journal_name": "huggingface",
+    "selected_indices": [
+      "A5",
+      "A13",
+      "A10",
+      "A9",
+      "A11"
+    ],
+    "articles": [
+      {
+        "title": "LeRobot v0.4.0: Supercharging OSS Robot Learning",
+        "link": "/blog/openenv",
+        "score": 0.35946598649024963,
+        "index": "A5"
+      },
+      {
+        "title": "SOTA OCR with Core ML and dots.ocr",
+        "link": "/blog/rteb",
+        "score": 0.3439510762691498,
+        "index": "A13"
+      },
+      {
+        "title": "Unlock the power of images with AI Sheets",
+        "link": "/blog/gpt-oss-on-intel-xeon",
+        "score": 0.30530425906181335,
+        "index": "A10"
+      },
+      {
+        "title": "Supercharge your OCR Pipelines with Open Models",
+        "link": "/blog/aisheets-unlock-images",
+        "score": 0.2784242331981659,
+        "index": "A9"
+      },
+      {
+        "title": "Google Cloud C4 Brings a 70% TCO improvement on GPT OSS with Intel and Hugging Face",
+        "link": "/blog/openvino-vlm",
+        "score": 0.2710018455982208,
+        "index": "A11"
+      }
+    ],
+    "method": "embedding_match",
+    "count": 5,
+    "summaries": ""
+  }
+}

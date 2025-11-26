@@ -37,7 +37,8 @@ from modules.xiv_scrath import fetch_arxiv, fetch_biorxiv_medrxiv,fetch_huggingf
 from modules.nature_series import fetch_nature_series,download_pdf
 from modules.science_series import fetch_science
 
-from utils.functions import generate_wordclouds
+from utils.functions import generate_wordclouds, load_all_cache
+from utils.recommendation import get_recommendations
 
 
 #=== 处理nature系列期刊 ===
@@ -78,7 +79,7 @@ from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, 
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QPainter
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QScrollArea, QWidget, QTextBrowser
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QPushButton, QMainWindow, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QScrollArea, QWidget, QTextBrowser, QTextEdit, QLineEdit
 import webbrowser
 from threading import Lock
 from PyQt5.QtWidgets import QInputDialog
@@ -129,6 +130,10 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon('achat.png')) 
         self.setGeometry(100, 100, 2000, 1200)
         self.favorites = self.load_favorites()
+        
+        # 初始化聊天历史记录（用于多轮对话）
+        self.chat_history_messages = []  # 存储格式: [{"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}]
+        self.current_chat_session_id = None  # 当前聊天会话ID（用于保存）
 
 
 
@@ -140,13 +145,14 @@ class MainWindow(QMainWindow):
         button_scroll = QScrollArea()
         button_scroll.setWidgetResizable(True)
         # button_scroll.setStyleSheet("background-color: #f5f5f5; border: none;")
-        # button_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        button_scroll.setMaximumHeight(300)
+        button_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)  # 需要时显示滚动条
+        button_scroll.setMaximumHeight(600)  # 增加高度限制，确保能看到更多按钮
         button_scroll.setFixedWidth(300)  # 设置固定宽度
-
-
         button_container = QWidget()
         layout = QVBoxLayout(button_container)
+
+        collections_rightoflayout = QVBoxLayout()
+
 
 
         layout2 = QVBoxLayout()
@@ -270,12 +276,67 @@ class MainWindow(QMainWindow):
         self.source_vis_button = QPushButton("文章来源分布")
         self.source_vis_button.clicked.connect(self.show_source_distribution)
         layout.addWidget(self.source_vis_button)
-
-
-
+        
+        # 推荐系统按钮
+        self.recommend_lock = Lock()
+        self.recommend_button = QPushButton("智能推荐")
+        self.recommend_button.clicked.connect(lambda: self.start_recommendation('auto'))
+        layout.addWidget(self.recommend_button)
+        
+        self.recommend_keyword_button = QPushButton("推荐（关键词）")
+        self.recommend_keyword_button.clicked.connect(lambda: self.start_recommendation('keyword'))
+        layout.addWidget(self.recommend_keyword_button)
+        
+        self.recommend_embedding_button = QPushButton("推荐（语义）")
+        self.recommend_embedding_button.clicked.connect(lambda: self.start_recommendation('embedding'))
+        layout.addWidget(self.recommend_embedding_button)
+        
+        self.recommend_agent_button = QPushButton("推荐（AI）")
+        self.recommend_agent_button.clicked.connect(lambda: self.start_recommendation('agent'))
+        layout.addWidget(self.recommend_agent_button)
+        
         layout.addStretch()
-        layout2.addWidget(button_scroll)
+
+
+
         button_scroll.setWidget(button_container)
+
+        # 用于展示自己所关注的重要网站
+        # 首先再创造一个layout，使得展示的网站在按钮区域的右边，充分利用空间
+        # 创建一个新的布局
+        layout_firstrow = QHBoxLayout()
+        # 创建一个标签用于展示网站
+        self.hotsite_area = QTextBrowser()
+        self.hotsite_area.setOpenExternalLinks(True)
+       
+        # 添加网站信息内容
+        hotsite_html = self.load_hotsite_info()
+        self.hotsite_area.setHtml(hotsite_html)
+        self.hotsite_area.setOpenExternalLinks(True)
+
+
+        layout_firstrow.addWidget(button_scroll)
+        layout_firstrow.addWidget(self.hotsite_area)
+       
+        # 设置样式
+        layout_firstrow.setContentsMargins(0, 0, 0, 0)  # 去掉边距
+        layout_firstrow.setSpacing(0)  # 去掉间距
+        
+        #创建容器来包含布局
+        layout_firstrow_container = QWidget()
+        layout_firstrow_container.setLayout(layout_firstrow)
+      
+        layout_firstrow_container.setFixedHeight(300)  # 设置固定高度
+
+
+
+
+        
+        # 添加按钮到布局
+        # layout2.addWidget(button_scroll)
+       
+
+        layout2.addWidget(layout_firstrow_container)
 
         # 结果展示区域
         self.result_area = QTextBrowser()
@@ -328,11 +389,146 @@ class MainWindow(QMainWindow):
         self.graphics_view.setRenderHint(QPainter.Antialiasing)  # 启用抗锯齿
         self.graphics_view.setRenderHint(QPainter.SmoothPixmapTransform)  # 平滑缩放
 
-        # 创建一个垂直布局来容纳图形视图和会议信息
+        # 创建一个垂直布局来容纳图形视图、聊天区域和会议信息
         right_layout = QVBoxLayout()
 
         # 添加图形视图
         right_layout.addWidget(self.graphics_view)
+
+        # 创建聊天区域
+        chat_container = QWidget()
+        chat_layout = QVBoxLayout(chat_container)
+        chat_layout.setContentsMargins(2, 5, 5, 5)  # 减少左边距
+        chat_layout.setSpacing(5)
+        
+        # 聊天标题和操作按钮（水平布局）
+        title_layout = QHBoxLayout()
+        chat_title = QLabel("小A")
+        chat_title.setStyleSheet("""
+            QLabel {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333333;
+                padding: 5px;
+            }
+        """)
+        title_layout.addWidget(chat_title)
+        
+        # 新开聊天按钮
+        self.new_chat_button = QPushButton("新对话")
+        self.new_chat_button.setFixedWidth(70)
+        self.new_chat_button.setStyleSheet("""
+            QPushButton {
+                background-color: #28a745;
+                color: white;
+                font-size: 12px;
+                border-radius: 5px;
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #218838;
+            }
+        """)
+        self.new_chat_button.clicked.connect(self.new_chat_session)
+        title_layout.addWidget(self.new_chat_button)
+        
+        # 保存聊天记录按钮
+        self.save_chat_button = QPushButton("保存")
+        self.save_chat_button.setFixedWidth(60)
+        self.save_chat_button.setStyleSheet("""
+            QPushButton {
+                background-color: #17a2b8;
+                color: white;
+                font-size: 12px;
+                border-radius: 5px;
+                padding: 3px;
+            }
+            QPushButton:hover {
+                background-color: #138496;
+            }
+        """)
+        self.save_chat_button.clicked.connect(self.save_chat_history)
+        title_layout.addWidget(self.save_chat_button)
+        
+        title_layout.addStretch()  # 添加弹性空间
+        chat_layout.addLayout(title_layout)
+        
+        # 对话历史显示区域
+        self.chat_history = QTextBrowser()
+        self.chat_history.setMaximumHeight(399)
+        self.chat_history.setStyleSheet("""
+            QTextBrowser {
+                background-color: #ffffff;
+                color: #333333;
+                font-family: Arial, sans-serif;
+                font-size: 28px;
+                border: 1px solid #cccccc;
+                border-radius: 5px;
+                padding: 5px 0px 5px 0px !important;
+            }
+        """)
+        # 设置文档边距为0，减少左侧空白
+        self.chat_history.document().setDocumentMargin(0)
+        # 设置默认样式表，消除body和html的默认边距
+        self.chat_history.document().setDefaultStyleSheet("""
+            body { margin: 0; padding: 0; }
+            html { margin: 0; padding: 0; }
+            p { margin: 0; padding: 0; margin-bottom: 10px; }
+            div { margin: 0; padding: 0; }
+        """)
+        self.chat_history.setHtml("<body style='margin: 0; padding: 0;'><p style='color:#666; margin: 0; padding: 0; margin-bottom: 10px;'>我是您的小助手！您可以问我关于文章、期刊、研究等相关问题。</p></body>")
+        chat_layout.addWidget(self.chat_history)
+        
+        # 输入区域（水平布局）
+        input_layout = QHBoxLayout()
+        
+        # 输入框
+        self.chat_input = QTextEdit()
+        self.chat_input.setMaximumHeight(60)
+        self.chat_input.setPlaceholderText("输入您的问题... (Ctrl+Enter发送)")
+        self.chat_input.setStyleSheet("""
+            QTextEdit {
+                background-color: #ffffff;
+                color: #333333;
+                font-family: Arial, sans-serif;
+                font-size: 28px;
+                border: 1px solid #cccccc;
+                border-radius: 5px;
+                padding: 5px;
+            }
+        """)
+        # 绑定Ctrl+Enter快捷键发送消息
+        from PyQt5.QtWidgets import QShortcut
+        from PyQt5.QtGui import QKeySequence
+        send_shortcut = QShortcut(QKeySequence("Ctrl+Return"), self.chat_input)
+        send_shortcut.activated.connect(self.send_chat_message)
+        input_layout.addWidget(self.chat_input)
+        
+        # 发送按钮
+        self.send_button = QPushButton("发送")
+        self.send_button.setFixedWidth(60)
+        self.send_button.setStyleSheet("""
+            QPushButton {
+                background-color: #0078d7;
+                color: white;
+                font-size: 14px;
+                border-radius: 5px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background-color: #005a9e;
+            }
+            QPushButton:pressed {
+                background-color: #004578;
+            }
+        """)
+        self.send_button.clicked.connect(self.send_chat_message)
+        input_layout.addWidget(self.send_button)
+        
+        chat_layout.addLayout(input_layout)
+        
+        # 将聊天区域添加到右侧布局
+        right_layout.addWidget(chat_container)
 
         # 创建并添加会议信息面板
         self.conference_info = QTextBrowser()
@@ -385,15 +581,25 @@ class MainWindow(QMainWindow):
         container.setLayout(main_layout)
         self.setCentralWidget(container)
 
+        print("Welcome to Article_taste！")
     #读取配置信息
+   
     def load_conference_info(self):
         if os.path.exists('config.json'):
             conference_info = json.load(open('config.json', 'r', encoding='utf-8'))['conference']
-            print(conference_info)
+       
             conference_info = [f"<p>• <a href='{info[1]}' style='font-size: 18px;'>{info[0]}</a></p>" for info in conference_info]
             conference_info = "<h3 style='color: #333; margin-bottom: 10px;'>Conference board</h3><div style='margin-left: 10px;'>" + "".join(conference_info)+ "</div>"
   
         return conference_info
+    
+    def load_hotsite_info(self):
+        if os.path.exists('config.json'):
+            hotsite_info = json.load(open('config.json', 'r', encoding='utf-8'))['important_site']
+            hotsite_info = [f"<a href='{info[1]}' style='font-size: 18px;color:#332'>{info[0]}</a> <span style='color:#128; font-size: 18px'>|</span> " for info in hotsite_info]
+            hotsite_info = "<h3 style=' margin-bottom: 5px;'>Hotsite</h3><div style='margin-left: 10px;'>" + "".join(hotsite_info)+ "</div>"
+        return hotsite_info
+
     #可视化函数
     def show_plot(self, file_path):
         """通用显示图表方法"""
@@ -527,10 +733,9 @@ class MainWindow(QMainWindow):
             self.debug_area.verticalScrollBar().maximum()
         )
     
-    def closeEvent(self, event):
-        # 恢复标准输出
+    def restore_stdout(self):
+        # 恢复标准输出（在需要时调用）
         sys.stdout = sys.__stdout__
-        # ...existing closeEvent code...
 
     def wheelEvent(self, event):
         """实现缩放功能"""
@@ -556,10 +761,424 @@ class MainWindow(QMainWindow):
             self.graphics_scene.clear()  # 清除旧的图形项
             self.graphics_scene.addItem(pixmap_item)
 
-
+    # 聊天相关方法
+    def send_chat_message(self):
+        """发送聊天消息"""
+        message = self.chat_input.toPlainText().strip()
+        if not message:
+            return
+        
+        message_lower = message.lower()
+        
+        # 检查是否是推荐请求
+        is_recommend_request = any(word in message_lower for word in ['推荐', 'recommend', '推荐文章', '相关文章'])
+        
+        # 显示用户消息
+        self.append_chat_message("用户", message)
+        
+        # 将用户消息添加到历史记录
+        self.chat_history_messages.append({"role": "user", "content": message})
+        
+        # 清空输入框
+        self.chat_input.clear()
+        
+        # 如果是推荐请求，直接触发推荐功能
+        if is_recommend_request:
+            # 禁用发送按钮
+            self.send_button.setEnabled(False)
+            self.send_button.setText("推荐中...")
+            
+            # 根据收藏数量自动选择方法
+            favorites_count = len(self.favorites)
+            if favorites_count < 3:
+                method = 'keyword'
+            elif favorites_count < 10:
+                method = 'embedding'
+            else:
+                method = 'agent'
+            
+            # 显示AI响应
+            method_names = {'keyword': '关键词匹配', 'embedding': '语义相似度', 'agent': 'AI智能推荐'}
+            response_text = f"好的！我将使用{method_names.get(method, '自动选择')}方法为您推荐文章。\n\n根据您当前有{favorites_count}篇收藏，我选择了最适合的推荐方法。\n\n正在为您生成推荐..."
+            self.append_chat_message("AI助手", response_text)
+            
+            # 将AI响应添加到历史记录
+            self.chat_history_messages.append({"role": "assistant", "content": response_text})
+            
+            # 触发推荐
+            self.start_recommendation(method)
+            
+            # 恢复发送按钮
+            self.send_button.setEnabled(True)
+            self.send_button.setText("发送")
+            return
+        
+        # 禁用发送按钮，防止重复发送
+        self.send_button.setEnabled(False)
+        self.send_button.setText("思考中...")
+        
+        # 启动AI响应线程（传入历史消息）
+        self.chat_thread = ChatAgentThread(message, self.get_chat_context(), self.chat_history_messages[:-1])  # 传入除当前消息外的历史
+        self.chat_thread.response_signal.connect(self.on_chat_response)
+        self.chat_thread.start()
+    
+    def format_markdown_to_html(self, text):
+        """将Markdown格式转换为美观的HTML"""
+        import re
+        
+        if not text:
+            return ""
+        
+        # 先保护代码块，避免被其他规则处理
+        code_blocks = []
+        def save_code_block(match):
+            code_blocks.append(match.group(0))
+            return f"__CODE_BLOCK_{len(code_blocks)-1}__"
+        
+        text = re.sub(r'```[\s\S]*?```', save_code_block, text)
+        
+        # 保护行内代码
+        inline_codes = []
+        def save_inline_code(match):
+            inline_codes.append(match.group(0))
+            return f"__INLINE_CODE_{len(inline_codes)-1}__"
+        
+        text = re.sub(r'`[^`]+`', save_inline_code, text)
+        
+        # 转义HTML特殊字符
+        text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+        
+        # 按行处理
+        lines = text.split('\n')
+        result_lines = []
+        in_ul = False
+        in_ol = False
+        
+        for i, line in enumerate(lines):
+            stripped = line.strip()
+            
+            # 处理标题（必须在行首）
+            if re.match(r'^#{1,3}\s+', stripped):
+                if in_ul:
+                    result_lines.append('</ul>')
+                    in_ul = False
+                if in_ol:
+                    result_lines.append('</ol>')
+                    in_ol = False
+                
+                if stripped.startswith('###'):
+                    title_text = re.sub(r'^###\s+', '', stripped)
+                    result_lines.append(f'<h3 style="color: #0078d7; margin: 12px 0 6px 0; font-size: 18px; font-weight: bold;">{title_text}</h3>')
+                elif stripped.startswith('##'):
+                    title_text = re.sub(r'^##\s+', '', stripped)
+                    result_lines.append(f'<h2 style="color: #005a9e; margin: 14px 0 7px 0; font-size: 20px; font-weight: bold;">{title_text}</h2>')
+                elif stripped.startswith('#'):
+                    title_text = re.sub(r'^#\s+', '', stripped)
+                    result_lines.append(f'<h1 style="color: #004578; margin: 16px 0 8px 0; font-size: 22px; font-weight: bold;">{title_text}</h1>')
+                continue
+            
+            # 处理无序列表
+            if re.match(r'^[-*]\s+', stripped):
+                if in_ol:
+                    result_lines.append('</ol>')
+                    in_ol = False
+                if not in_ul:
+                    result_lines.append('<ul style="margin: 8px 0; padding-left: 25px; list-style-type: disc;">')
+                    in_ul = True
+                item_text = re.sub(r'^[-*]\s+', '', stripped)
+                result_lines.append(f'<li style="margin: 4px 0; line-height: 1.5;">{item_text}</li>')
+                continue
+            
+            # 处理有序列表
+            if re.match(r'^\d+\.\s+', stripped):
+                if in_ul:
+                    result_lines.append('</ul>')
+                    in_ul = False
+                if not in_ol:
+                    result_lines.append('<ol style="margin: 8px 0; padding-left: 25px;">')
+                    in_ol = True
+                item_text = re.sub(r'^\d+\.\s+', '', stripped)
+                result_lines.append(f'<li style="margin: 4px 0; line-height: 1.5;">{item_text}</li>')
+                continue
+            
+            # 普通行
+            if in_ul:
+                result_lines.append('</ul>')
+                in_ul = False
+            if in_ol:
+                result_lines.append('</ol>')
+                in_ol = False
+            
+            if stripped:  # 非空行
+                result_lines.append(line)
+            else:  # 空行作为段落分隔
+                result_lines.append('<br>')
+        
+        # 关闭未关闭的列表
+        if in_ul:
+            result_lines.append('</ul>')
+        if in_ol:
+            result_lines.append('</ol>')
+        
+        text = '\n'.join(result_lines)
+        
+        # 处理粗体 **text** 或 __text__
+        text = re.sub(r'\*\*([^*]+)\*\*', r'<strong style="font-weight: bold; color: #333;">\1</strong>', text)
+        text = re.sub(r'__([^_]+)__', r'<strong style="font-weight: bold; color: #333;">\1</strong>', text)
+        
+        # 处理斜体 *text*（不在粗体内部）
+        text = re.sub(r'(?<!\*)\*([^*\n]+)\*(?!\*)', r'<em style="font-style: italic;">\1</em>', text)
+        
+        # 恢复代码块
+        for i, code_block in enumerate(code_blocks):
+            code_content = code_block.replace('```', '').strip()
+            text = text.replace(f'__CODE_BLOCK_{i}__', 
+                              f'<pre style="background-color: #f5f5f5; padding: 12px; border-radius: 5px; overflow-x: auto; margin: 8px 0; border-left: 3px solid #0078d7;"><code style="font-family: monospace; font-size: 13px;">{code_content}</code></pre>')
+        
+        # 恢复行内代码
+        for i, inline_code in enumerate(inline_codes):
+            code_content = inline_code.replace('`', '')
+            text = text.replace(f'__INLINE_CODE_{i}__', 
+                              f'<code style="background-color: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-family: monospace; font-size: 13px; color: #d63384;">{code_content}</code>')
+        
+        # 处理换行：将连续换行转换为段落分隔
+        text = re.sub(r'<br>\s*<br>+', '</p><p style="margin: 8px 0; line-height: 1.6;">', text)
+        text = '<p style="margin: 5px 0; line-height: 1.6;">' + text + '</p>'
+        
+        # 清理多余的段落标签和换行
+        text = re.sub(r'</p>\s*<p[^>]*>', '<br><br>', text)
+        text = re.sub(r'^<p[^>]*>', '', text)
+        text = re.sub(r'</p>$', '', text)
+        text = re.sub(r'<br>\s*<br>\s*<br>+', '<br><br>', text)  # 限制连续换行
+        
+        return text
+    
+    def append_chat_message(self, sender, message):
+        """添加聊天消息到历史记录"""
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        
+        # 格式化消息内容（如果是AI助手，转换Markdown）
+        if sender == "AI助手":
+            formatted_message = self.format_markdown_to_html(message)
+        else:
+            # 用户消息也做基本格式化（转义HTML）
+            formatted_message = message.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('\n', '<br>')
+        
+        if sender == "用户":
+            html = f'''<div style="margin: 0; padding: 0; margin-bottom: 15px; text-align: left;">
+<div style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); color: #333; padding: 12px 16px; border-radius: 12px; display: inline-block; max-width: 85%; word-wrap: break-word; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+<div style="line-height: 1.6;">{formatted_message}</div>
+</div>
+<div style="margin-top: 4px;">
+<span style="color: #999; font-size: 11px;">{timestamp}</span>
+</div>
+</div>'''
+        else:
+            html = f'''<div style="margin: 0; padding: 0; margin-bottom: 15px; text-align: left;">
+<div style="background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%); color: #333; padding: 12px 16px; border-radius: 12px; display: inline-block; max-width: 85%; word-wrap: break-word; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-left: 4px solid #0078d7;">
+<div style="margin-bottom: 6px;">
+<b style="color: #0078d7; font-size: 14px;"> {sender}</b>
+</div>
+<div style="line-height: 1.6; color: #333;">{formatted_message}</div>
+</div>
+<div style="margin-top: 4px;">
+<span style="color: #999; font-size: 11px;">{timestamp}</span>
+</div>
+</div>'''
+        
+        # 使用moveCursor和insertHtml代替setHtml，避免重新解析整个HTML
+        cursor = self.chat_history.textCursor()
+        cursor.movePosition(cursor.End)
+        cursor.insertHtml(html)
+        
+        # 自动滚动到底部
+        self.chat_history.verticalScrollBar().setValue(
+            self.chat_history.verticalScrollBar().maximum()
+        )
+    
+    def on_chat_response(self, response):
+        """处理AI响应"""
+        self.append_chat_message("AI助手", response)
+        # 将AI响应添加到历史记录
+        self.chat_history_messages.append({"role": "assistant", "content": response})
+        # 恢复发送按钮
+        self.send_button.setEnabled(True)
+        self.send_button.setText("发送")
+    
+    def get_chat_context(self):
+        """获取聊天上下文（收藏夹、缓存数据等）"""
+        context = {
+            "favorites_count": len(self.favorites),
+            "cache_sources": list(load_all_cache().keys()) if os.path.exists(CACHE_FILE) else []
+        }
+        return context
+    
+    def new_chat_session(self):
+        """新开聊天会话"""
+        # 如果当前有聊天记录，先保存
+        if self.chat_history_messages:
+            reply = QMessageBox.question(
+                self, 
+                '新开对话', 
+                '是否保存当前对话记录？',
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel,
+                QMessageBox.Yes
+            )
+            
+            if reply == QMessageBox.Yes:
+                self.save_chat_history()
+            elif reply == QMessageBox.Cancel:
+                return  # 取消操作
+        
+        # 清空聊天历史
+        self.chat_history_messages = []
+        self.current_chat_session_id = None
+        
+        # 清空显示区域
+        self.chat_history.setHtml("<body style='margin: 0 !important; padding: 0 !important;'><p style='color:#666; margin: 0 !important; padding: 0 !important;'>我是您的小助手！您可以问我关于文章、期刊、研究等相关问题。</p></body>")
+        
+        print("已开启新对话")
+    
+    def save_chat_history(self):
+        """保存聊天记录到history_recorder目录"""
+        if not self.chat_history_messages:
+            QMessageBox.information(self, "提示", "当前没有聊天记录可保存。")
+            return
+        
+        # 确保history_recorder目录存在
+        history_dir = "history_recorder"
+        if not os.path.exists(history_dir):
+            os.makedirs(history_dir)
+        
+        # 生成文件名（使用时间戳）
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"chat_{timestamp}.json"
+        filepath = os.path.join(history_dir, filename)
+        
+        # 准备保存的数据
+        chat_data = {
+            "session_id": self.current_chat_session_id or timestamp,
+            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "messages": self.chat_history_messages
+        }
+        
+        # 保存到文件
+        try:
+            with open(filepath, 'w', encoding='utf-8') as f:
+                json.dump(chat_data, f, indent=2, ensure_ascii=False)
+            
+            QMessageBox.information(self, "保存成功", f"聊天记录已保存到：\n{filepath}")
+            print(f"聊天记录已保存：{filepath}")
+            
+            # 更新当前会话ID
+            self.current_chat_session_id = timestamp
+            
+        except Exception as e:
+            QMessageBox.critical(self, "保存失败", f"保存聊天记录时出错：\n{str(e)}")
+            print(f"保存聊天记录失败：{str(e)}")
+    
+    # 推荐系统相关方法
+    def start_recommendation(self, method='auto'):
+        """启动推荐系统"""
+        if self.recommend_lock.locked():
+            print("推荐正在进行中，请稍后...")
+            return
+        
+        if not self.favorites:
+            self.result_area.setText("⚠️ 您的收藏夹为空，无法进行推荐。请先收藏一些感兴趣的文章。")
+            return
+        
+        self.recommend_lock.acquire()
+        method_name = {'auto': '自动选择', 'keyword': '关键词匹配', 'embedding': '语义相似度', 'agent': 'AI智能推荐'}.get(method, '自动选择')
+        print(f"开始使用{method_name}方法进行推荐...")
+        
+        def on_recommend_complete(results, actual_method, journal_summaries):
+            self.show_recommendations(results, actual_method, journal_summaries)
+            print(f"推荐完成！使用了{actual_method}方法")
+            
+            # 将summary显示到聊天框（仅方法C有summary）
+            if journal_summaries and actual_method == 'AI智能推荐':
+                for journal_name, summary in journal_summaries.items():
+                    if summary:
+                        count = sum(1 for r in results if r[3] == journal_name)
+                        message = f"📚 {journal_name}\n\n我为您选取了 {count} 篇相关文章。\n\n推荐理由：\n{summary}"
+                        self.append_chat_message("AI助手", message)
+            
+            self.recommend_lock.release()
+            # 确保发送按钮恢复正常状态
+            if hasattr(self, 'send_button'):
+                self.send_button.setEnabled(True)
+                self.send_button.setText("发送")
+        
+        self.recommend_thread = RecommendationThread(method)
+        self.recommend_thread.result_signal.connect(on_recommend_complete)
+        self.recommend_thread.start()
+    
+    def show_recommendations(self, results, method, journal_summaries=None):
+        """显示推荐结果（按期刊分类）"""
+        if not results:
+            self.result_area.setText(f"使用{method}方法未找到推荐文章。请确保：\n1. 收藏夹中有文章\n2. 缓存中有文章数据\n3. 文章与您的收藏有相关性")
+            return
+        
+        if journal_summaries is None:
+            journal_summaries = {}
+        
+        html_results = []
+        html_results.append(f"<h3 style='color: #0078d7; margin-bottom: 15px;'>📚 推荐文章（使用{method}方法，共{len(results)}篇）</h3>")
+        
+        # 按期刊分组
+        journal_groups = {}
+        for title, link, score, source in results:
+            if source not in journal_groups:
+                journal_groups[source] = []
+            journal_groups[source].append((title, link, score))
+        
+        # 按期刊展示
+        article_idx = 1
+        for journal_name, articles in journal_groups.items():
+            # 期刊标题
+            count = len(articles)
+            html_results.append(f'''
+                <div style="margin-top: 20px; margin-bottom: 10px;">
+                    <h4 style="color: #005a9e; font-size: 18px; font-weight: bold; border-bottom: 2px solid #0078d7; padding-bottom: 5px;">
+                        📁 {journal_name} ({count}篇)
+                    </h4>
+                </div>
+            ''')
+            
+            # 该期刊的文章列表
+            for title, link, score in articles:
+                # 格式化分数显示
+                score_str = f"{score:.3f}" if isinstance(score, float) else str(score)
+                
+                # 高亮显示匹配度高的文章
+                if score > 0.1:
+                    title_style = "color:red;font-size:18px;font-weight:600;"
+                else:
+                    title_style = "color:black;font-size:16px;"
+                
+                title = insert_changeline(title)
+                
+                result_html = f'''
+                    <div style="margin-bottom: 15px; padding: 10px; border-left: 3px solid #0078d7; background-color: #f8f9fa; margin-left: 20px;">
+                        <div style="margin-bottom: 5px;">
+                            <span style="background-color: #0078d7; color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px; margin-right: 8px;">#{article_idx}</span>
+                            <a href="{link}" target="_blank" style="{title_style}">{title}</a>
+                        </div>
+                        <div style="color: #666; font-size: 12px; margin-top: 5px;">
+                            <span style="margin-right: 15px;">📊 匹配度: {score_str}</span>
+                        </div>
+                    </div>
+                '''
+                html_results.append(result_html)
+                article_idx += 1
+        
+        self.result_area.setHtml("<br>".join(html_results))
 
     
     def show_context_menu(self, pos):
+        import re
         print("右键菜单事件触发")
         menu = QMenu(self)
 
@@ -569,6 +1188,8 @@ class MainWindow(QMainWindow):
 
         # 获取鼠标位置对应的文章链接和标题
         link, title = self.get_link_and_title_under_cursor(pos)
+        title = re.sub(r'<.*?>', '', title)  # 去除HTML标签
+        
         print(f"链接: {link}, 标题: {title}")  # 打印查看获取的链接和标题
 
         if link and title:
@@ -637,12 +1258,15 @@ class MainWindow(QMainWindow):
         with open(FAVORITES_FILE, 'w', encoding='utf-8') as f:
             json.dump(self.favorites, f, indent=4, ensure_ascii=False)
 
-
+    # 用来展示结果的函数
     def show_results(self, results):
         highlighted_results = []
         # print(len(results[0]))
 
         if len(results[0]) == 2:  # 处理标题和链接
+            #我们这里可以首先进行排序，把包含keyword的放在前面
+            results = sorted(results, key=lambda x: any(keyword.lower() in x[0].lower() for keyword in CONFIG["keywords"]), reverse=True)
+
             for title, link in results:
                 title = insert_changeline(title)
                 if any(keyword.lower() in title.lower() for keyword in CONFIG["keywords"]):
@@ -661,6 +1285,7 @@ class MainWindow(QMainWindow):
                 highlighted_results.append(result_html)
         
         elif len(results[0]) == 4:  # 处理包含四个元素的数据
+            results = sorted(results, key=lambda x: any(keyword.lower() in x[0].lower() for keyword in CONFIG["keywords"]), reverse=True)
             for title, link, __, ___ in results:
                 title = insert_changeline(title)
                 if any(keyword.lower() in title.lower() for keyword in CONFIG["keywords"]):
@@ -733,10 +1358,25 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         """确保在应用退出时，所有线程被正确终止"""
+        # 恢复标准输出
+        sys.stdout = sys.__stdout__
+        
         # for thread in self.threads:
         #     thread.terminate()
         #     thread.wait()
         self.save_favorites()
+        
+        # 如果有关闭时的聊天记录，询问是否保存
+        if self.chat_history_messages:
+            reply = QMessageBox.question(
+                self, 
+                '退出应用', 
+                '是否保存当前对话记录？',
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.Yes
+            )
+            if reply == QMessageBox.Yes:
+                self.save_chat_history()
         
         event.accept()
     
@@ -1134,6 +1774,84 @@ class FethuggingfaceThread(QThread):
             self.result_signal.emit(result)  # 发送信号，将结果传回主线程
         except Exception as e:
             self.result_signal.emit([(f"Error fetching {self.journal_name}: {str(e)}", "", "", "")])
+
+
+# 推荐系统线程类
+class RecommendationThread(QThread):
+    result_signal = pyqtSignal(list, str, dict)  # 定义信号，传递推荐结果、方法和summaries
+    
+    def __init__(self, method='auto'):
+        super().__init__()
+        self.method = method
+    
+    def run(self):
+        try:
+            results, actual_method, journal_summaries = get_recommendations(self.method, top_n=20)
+            self.result_signal.emit(results, actual_method, journal_summaries)
+        except Exception as e:
+            print(f"推荐系统错误: {str(e)}")
+            self.result_signal.emit([], f"错误: {str(e)}", {})
+
+
+# 聊天AI线程类
+class ChatAgentThread(QThread):
+    response_signal = pyqtSignal(str)  # 定义信号，传递AI响应
+    
+    def __init__(self, user_message, context=None, history_messages=None):
+        super().__init__()
+        self.user_message = user_message
+        self.context = context or {}
+        self.history_messages = history_messages or []  # 历史对话消息
+    
+    def run(self):
+        try:
+            response = self.generate_response(self.user_message, self.context, self.history_messages)
+            self.response_signal.emit(response)
+        except Exception as e:
+            error_msg = f"抱歉，处理您的请求时出现错误: {str(e)}"
+            self.response_signal.emit(error_msg)
+    
+    def generate_response(self, message, context, history_messages):
+        """生成AI响应（使用chat_engine进行多轮对话）"""
+        from utils.chat_engine import chat_engine
+        
+        # 构建系统提示词（包含上下文信息）
+        system_context = []
+        
+        # 添加收藏夹信息
+        fav_count = context.get('favorites_count', 0)
+        if fav_count > 0:
+            system_context.append(f"用户当前有 {fav_count} 篇收藏的文章。")
+        
+        # 添加缓存数据源信息
+        cache_sources = context.get('cache_sources', [])
+        if cache_sources:
+            sources_str = '、'.join(cache_sources[:5])
+            system_context.append(f"当前缓存的数据来源包括：{sources_str}。")
+        
+        # 构建完整的系统提示
+        system_prompt = f"""你是一个专业的科研助手，可以帮助用户：
+1. 分析收藏夹偏好和推荐相关文章
+2. 回答关于期刊和文章的问题
+3. 协助进行文献检索
+4. 生成词云和可视化分析
+
+{chr(10).join(system_context) if system_context else ''}
+
+请用友好、专业的方式回答用户的问题。如果用户询问关于收藏、期刊、推荐等功能，请提供具体的操作指导。"""
+        
+        # 使用chat_engine进行多轮对话
+        engine = chat_engine()
+        
+        # 调用chat_with_LLM，传入历史消息
+        response = engine.chat_with_LLM(
+            task="科研助手对话",
+            prompt=message,
+            model_type="qwen-flash",
+            history_messages=history_messages
+        )
+        
+        return response
 
 
 

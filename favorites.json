@@ -42,5 +42,69 @@
     [
         "<br /><a href=\"https://github.com/codefuse-ai/Awesome-Code-LLM\"><span style=\" font-size:20px; font-weight:600; text-decoration: underline; color:#ff0000;\">Awesome-Code-LLM stars:2328</span>",
         "https://github.com/codefuse-ai/Awesome-Code-LLM"
+    ],
+    [
+        "<a href=\"https://www.nature.com/articles/d41586-025-01126-8\"><span style=\" font-size:16px; text-decoration: underline; color:#000000;\">Science’s golden oldies: the decades-old research papers still heavily cited today</span>",
+        "https://www.nature.com/articles/d41586-025-01126-8"
+    ],
+    [
+        "I told AI to make me a protein. Here’s what it came up with",
+        "https://www.nature.com/articles/d41586-025-01586-y"
+    ],
+    [
+        "AI-generated literature reviews threaten scientific progress",
+        "https://www.nature.com/articles/d41586-025-01603-0"
+    ],
+    [
+        "Toward fair AI-driven medical text generation",
+        "https://www.nature.com/articles/s43588-025-00807-8"
+    ],
+    [
+        "Evaluating and mitigating bias in AI-based medical text generation",
+        "https://www.nature.com/articles/s43588-025-00789-7"
+    ],
+    [
+        "Multimodal learning for mapping genotype–phenotype dynamics",
+        "https://www.nature.com/articles/s43588-024-00765-7"
+    ],
+    [
+        "Self-supervised learning from small-molecule mass spectrometry data",
+        "https://www.nature.com/articles/s41587-025-02677-x"
+    ],
+    [
+        "Towards agentic science for advancing scientific discovery",
+        "https://www.nature.com/articles/s42256-025-01110-x"
+    ],
+    [
+        "Common to rare transfer learning (CORAL) enables inference and prediction for a quarter million rare Malagasy arthropods",
+        "https://www.nature.com/articles/s41592-025-02823-y"
+    ],
+    [
+        "DeepMVP: deep learning models trained on high-quality data accurately predict PTM sites and variant-induced alterations",
+        "https://www.nature.com/articles/s41592-025-02797-x"
+    ],
+    [
+        "Scaling up sequence searching",
+        "https://www.nature.com/articles/s41592-025-02922-w"
+    ],
+    [
+        "#2 Common to rare transfer learning (CORAL) enables inference and prediction for a quarter million rare Malagasy arthropods",
+        "https://www.nature.com/articles/s41592-025-02823-y"
+    ],
+    [
+        "#3 Self-supervised learning from small-molecule mass spectrometry data",
+        "https://www.nature.com/articles/s41587-025-02677-x"
+    ],
+    [
+        "#20 scNET: learning context-specific gene and cell embeddings by integrating single-cell gene expression data with protein–protein interactions",
+        "https://www.nature.com/articles/s41592-025-02627-0"
+    ],
+    [
+        "#3 A comprehensive large-scale biomedical knowledge graph for AI-powered data-driven biomedical research",
+        "https://www.nature.com/articles/s42256-025-01014-w"
+    ],
+    [
+        "#9 llm-search",
+        "https://github.com/snexus/llm-search"
     ]
 ]

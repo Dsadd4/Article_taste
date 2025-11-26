@@ -1,3 +1,24 @@
-{"keywords": ["language model"," AI ","AI-","neural network","LLM","machine learning","learning"],
-"conference":[["CVPR","https://cvpr.thecvf.com/"],["NeurIPS","https://nips.cc/"],["ICLR","https://iclr.cc/"],["ICCV","https://iccv.thecvf.com/"],["ECCV","https://eccv2024.ecva.net/"],["ICML","https://icml.cc/"],["AAAI","https://aaai.org/"],["IJCAI","https://ijcai.org/"],["ACL","https://aclweb.org/"],["EMNLP","https://2025.emnlp.org/"],["NAACL","https://2024.naacl.org/"],["COLING","https://coling2024.org/"],["KDD","https://www.kdd.org/kdd2024/"],["WWW","https://www2024.thewebconf.org/"],["SIGIR","https://sigir.org/"],["CIKM","https://www.cikm2024.org/"],["ICDM","https://icdm2024.com/"],["WSDM","https://www.wsdm-conference.org/"]]
+{"keywords": ["agent","deep","search","language model"," AI ","AI-","neural network","LLM","machine learning","learning","learn"],
+"conference":[["CVPR","https://cvpr.thecvf.com/"],["NeurIPS","https://nips.cc/"],["ICLR","https://iclr.cc/"],["ICCV","https://iccv.thecvf.com/"],["ECCV","https://eccv2024.ecva.net/"],["ICML","https://icml.cc/"],["AAAI","https://aaai.org/"],["IJCAI","https://ijcai.org/"],["ACL","https://aclweb.org/"],["EMNLP","https://2025.emnlp.org/"],["NAACL","https://2024.naacl.org/"],["COLING","https://coling2024.org/"],["KDD","https://www.kdd.org/kdd2024/"],["WWW","https://www2024.thewebconf.org/"],["SIGIR","https://sigir.org/"],["CIKM","https://www.cikm2024.org/"],["ICDM","https://icdm2024.com/"],["WSDM","https://www.wsdm-conference.org/"]],
+"important_site":[
+    ["Papers with Code","https://paperswithcode.com/"],["Google Scholar","https://scholar.google.com/"],["Semantic Scholar","https://www.semanticscholar.org/"],["ResearchGate","https://www.researchgate.net/"],["OpenReview","https://openreview.net/"],
+    ["Hugginface","https://huggingface.co/"],["arXiv","https://arxiv.org/"],
+    ["Model Zoo","https://modelzoo.co/"],["Model Hub","https://modelhub.ai/"],
+    ["Model Search","https://modelsearch.ai/"],
+    ["pubmed","https://pubmed.ncbi.nlm.nih.gov/"],
+    ["TPAMI","https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=34"],
+    ["Pattern recognization","https://www.journals.elsevier.com/pattern-recognition"],
+    ["Patterns","https://www.cell.com/patterns/home"],
+    ["ACM","https://dl.acm.org/"],
+    ["IEEE","https://ieeexplore.ieee.org/Xplore/home.jsp"],
+    ["Springer","https://link.springer.com/"],
+    ["Elsevier","https://www.elsevier.com/en-xm"],
+    ["MDPI","https://www.mdpi.com/"],
+    ["Taylor & Francis","https://www.tandfonline.com/"],
+    ["Wiley","https://onlinelibrary.wiley.com/"],
+    ["SAGE","https://journals.sagepub.com/"],
+    ["Nature","https://www.nature.com/"],
+    ["ScienceDirect","https://www.sciencedirect.com/"]
+    
+    ]
 }
