@@ -79,7 +79,7 @@ def github_scrath(keyword, pages, recentyear):
             params=params, 
             headers={
                 'Accept': 'application/vnd.github.v3+json',
-                'Authorization': 'token *************'  # 替换为你的token
+                'Authorization': 'token *************'  # 替换为你的token insert your token of github
             }
         )
         if response.status_code != 200:
