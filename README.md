@@ -150,7 +150,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 概述
 
-Article Taste 是一款集成了大语言模型的综合桌面应用，专门用来追踪和管理各大平台的科学论文。有了它，你再也不用在各个网站之间跳来跳去，就能轻松掌握 ArXiv、Nature 系列期刊、bioRxiv、Science、Cell 等平台的最新动态。科研人的福音，懒癌患者的救星！
+Article Taste 是一款集成了大语言模型的综合桌面应用，专门用来追踪和管理各大平台的科学论文。有了它，你再也不用在各个网站之间跳来跳去，就能轻松掌握 ArXiv、Nature 系列期刊、bioRxiv、Science、Cell 等平台的最新动态。科研人的福音！
 
 <img src="achat.png" alt="Application Screenshot" width="200"/>
 
