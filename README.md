@@ -25,6 +25,13 @@ you can directly download this application from my personal website http://www.y
 recommended system through three different  recommendation strategy, including key word
     other useful black gadget like Visualize citation distributions, gitHub stars, and source distributions, word cloud generation, automatically download papers containing your keywords, Search Google Scholar with customizable keywords, GitHub repository hunter.
 
+remind:
+if you want to use LLM and agent based function, please insert you own token in 
+utils/api_key_config.yaml 
+
+three types are support,i strongly recommend you to use qwen series(cheap, and fast!)(but it is very easy if you like to add another core LLM
+, you just need to add function in utils/chat_engine.py, it is very easy, believe me!^^)
+
 ## Installation
 
 ### Prerequisites
