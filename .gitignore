@@ -38,6 +38,7 @@ venv.bak/
 .DS_Store
 
 # 项目特定文件
+/download
 backup/
 download/
 build/
@@ -82,3 +83,4 @@ modules/__pycache__
 /deprecated
 /fv
 /experiment/INSTRUCTION.md
+/note
